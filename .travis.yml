@@ -1,8 +1,20 @@
-sudo: false
+udo: false
 language: python
-python:
-      - 3.4
-install: "pip install -r requirements.txt"
-script: "make html"
-notifications:
-      email: false
+matrix:
+  include:
+    - python: "3.5"
+      env: LTD_MASON_BUILD=true
+install:
+  - pip install -r requirements.txt
+  - pip install "ltd-mason>=0.2,<0.3"
+script:
+  - sphinx-build -b html -a -n -d _build/doctree . _build/html
+after_success:
+  - ltd-mason-travis --html-dir _build/html
+env:
+  global:
+    - LTD_MASON_BUILD=false  # disable builds in regular text matrix
+    - LTD_MASON_PRODUCT="smtn-001"
+    # Add AWS and LTD Keeper credentials as encrypted secrets here
+    - secure: "WZfG65EIyB4yGRg3OECs1o2g9Tb/lsFMCPuncPVfv/12U/ujwPA0cS+dAH155EyKsqlTysowZlT4uCGIIC74FJw94WNiq3R3yGNuQm9X/jIHtYkjzbD72Z/6rVxdmceY5JXgSskh9i8LZHhSEJA/QhzdXLd4JGC+knBcZEUv8+2PfMBKu4jrBmahkJX1OxdW86mjgC20aVlI7gGizJk6DhEPbQuzWpqfnS9ufpfQwbrYHHhUcUUqekDSksMajDDFV4MDQyv+JAjwU3Iz4pFr8o37twlog1UuJ50rnk8ASaIvKiOrgpDOFMsWfaUYgf7dh4ZfECBF2Ax8vlfOBKl73yMTv/UaVAThFSME4TliTYiWcoNnlQWRdoh8Hwpaj0LVsz+S4+23MJPJxYCZTeRi1jlZ+Ph5V2b9BQViRcIYf7LngamHdc8EoKPyUCe+SWTxsaemWwgesT9TX/DwiuJ2/2j56ow0ztMgGf0Eu+W10Behiv06DLDEDaFbJSeM/fzgo/7uWDxNaJGIeqtHLe+pfTZIa0C4YdyUBNWQ19tVcMI/z5qSmPpCRKSbzRx7+0E7wjQSt0BBMbmdqqbEI7k+Cojw73e3lRh4yUsqLXtBK+t0FFg7AlhOTd4weDyRooSxpFD2XbDDUOl0QaxzuNs314eJ1R2ajrMV5FuU25OU0wE="
+    - secure: "ae76ZQ93ZLkP/K1MzUM4jRE3Qh419y+T4OFjndUBI70zjwd7oki6rctNOYBABynDjS2X+xgC6yA7DXMZZwPvJd+mWNH+hR6gz/KPf8xEFZiNjgKIhr3obQG/3bF9Cag219wyJej40y3xKetqixY18uz9cCEtA6Aa1L6Md0vJv3O3hNIlsxAcKUyM0QJcq99NLzHcS1THajWXIWCsnpI8m/gDNCzdTnSMrv9aL+LffI3IAbeXPMM8pKu0/2YYdEeIXyn0XGNK55kx6rL3PxuUHoPW4Y5cW+Bb/D+YjlcFRtLAEyoYCl9D56T66g8R4B0stl3J8/VhYm+K3vCOCXVlUoiFzow59duD6vS2DEMS3LiRlbjQ7ObFX+4G/9NLQNkMSNKBgl1fqjWh3PfSu1+KWxWy9Elm1wdG+qsSAkv/oV7CmwnqGr7fn/4axcm4CR01xLAa0Bmi4UohUspwJQx/Q7lqqWseQYwSU2rDGX0H3WawnzKLs9sPWm87z0pfY1EqMzrrFc91GhOa17c+rrCaWVSx/MaU8Z2kAl/RuK6BTbqt/8NdT6oOcxm1xeNm27ElIjFUxU33nCmPeCzF9oqq+XawqLSfXPVMk8n9i1Ql6EJsH5hspbkI7+RrqKp0hk9w10zL1wqYmRo79BHumHxeSfN3VsUOP45159NSUZF4szM="
